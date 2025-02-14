@@ -1,11 +1,12 @@
-# kubernetis-dev-servers
+# Kubernetis Dev servers
 
-## There is  example of .gitlab-ci.yml in ci_cd folder
+## This is Kubernetes Chart with Nginx, MySQL, PHP and phpMyAdmin 
 
 ## Install
     - Don't forget to edit file base/values.yaml before install this Chart
 
 ## How to use:
-    - install ```helm install my-release ./base```
-    - update ```helm upgrade my-release ./base```
-    - uninstall  ```helm uninstall my-release```
+    
+   - install ```helm install my-release ./base```
+   - update ```helm upgrade my-release ./base```
+   - uninstall  ```helm uninstall my-release```
