@@ -10,4 +10,3 @@
    - install ```helm install my-release ./base```
    - update ```helm upgrade my-release ./base```
    - uninstall  ```helm uninstall my-release```
-
