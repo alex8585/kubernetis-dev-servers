@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php-fpm-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: php-fpm
+  template:
+    metadata:
+      labels:
+        app: php-fpm
+    spec:
+      volumes:
+        - name: website-vol
+          persistentVolumeClaim:
+            claimName: site-html-pvc
+      containers:
+        - name: php-fpm
+          image: alex8585/mysqli-php-fpm
+          volumeMounts:
+            - name: website-vol
+              mountPath: /usr/share/nginx/html 
+          ports:
+            - containerPort: {{ .Values.phpfpm.inner_port }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.phpfpm.host }}
+spec:
+  selector:
+    app: php-fpm
+  ports:
+    - protocol: TCP
+      port: {{ .Values.phpfpm.inner_port }}
+      targetPort: {{ .Values.phpfpm.inner_port }}
+  type: ClusterIP

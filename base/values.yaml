@@ -1,0 +1,30 @@
+replicaCount: 2
+
+nginx:
+  node_port: "30002"
+  inner_port: "80"
+  inner_data_mount_path: "/usr/share/nginx/html"
+  data_mount_path: "/host/html" 
+
+mysql:
+  node_port: "30006"
+  host: "mysql-service"  
+  inner_data_mount_path: "/var/lib/mysql"
+  data_mount_path: "/host/mysql" 
+  inner_port: "3306"
+  user: "root"
+  password: "root"
+  root_password: "root" 
+
+phpmyadmin:
+  node_port: "30088"
+  apache_server_name: "localhost" 
+  inner_port: "80"
+
+phpfpm: 
+  inner_port: "9000"
+  host: "php-fpm-service"  
+
+
+
+

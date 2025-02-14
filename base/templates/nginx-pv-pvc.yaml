@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nginx-html-pv
+spec:
+  storageClassName: standard 
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany 
+  hostPath:
+    path: {{ .Values.nginx.data_mount_path }}
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: site-html-pvc
+spec:
+  storageClassName: standard 
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: nginx-html-pv
+
+
+
+

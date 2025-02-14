@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      volumes:
+        - name: website-vol
+          persistentVolumeClaim:
+            claimName: site-html-pvc
+        - name: nginx-config-vol
+          configMap:
+            name: nginx-config
+            items:
+              - key: nginx.conf
+                path: nginx.conf
+      containers:
+        - name: nginx
+          image: nginx:latest
+          volumeMounts:
+            - name: website-vol
+              mountPath: {{ .Values.nginx.inner_data_mount_path }}
+            - name: nginx-config-vol
+              mountPath: /etc/nginx/conf.d/nginx.conf
+              subPath: nginx.conf
+          ports:
+            - containerPort: {{ .Values.nginx.inner_port }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: {{ .Values.nginx.inner_port }}
+      targetPort: {{ .Values.nginx.inner_port }}
+      nodePort: {{ .Values.nginx.node_port }}
+  type: NodePort 
+

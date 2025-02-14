@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phpmyadmin 
+  namespace: default 
+  labels:
+    app: phpmyadmin 
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: phpmyadmin 
+  template:
+    metadata:
+      labels:
+        app: phpmyadmin 
+    spec:
+      containers:
+        - name: phpmyadmin 
+          image: phpmyadmin:latest 
+          ports:
+            - containerPort: {{ .Values.phpmyadmin.inner_port }} 
+          envFrom:
+            - configMapRef:
+                name: phpmyadmin-config 
+          volumeMounts:
+            - name: phpmyadmin-config-vol
+              mountPath: /etc/phpmyadmin/config.inc.php
+              subPath: config.inc.php
+      volumes:
+        - name: phpmyadmin-config-vol
+          configMap:
+            name: phpmyadmin-config
+            items:
+              - key: config.inc.php
+                path: config.inc.php
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: phpmyadmin-service 
+  namespace: default 
+  labels:
+    app: phpmyadmin 
+spec:
+  selector:
+    app: phpmyadmin 
+  ports:
+    - protocol: TCP 
+      port:  {{ .Values.phpmyadmin.inner_port }} 
+      targetPort: {{ .Values.phpmyadmin.inner_port }} 
+      nodePort: {{ .Values.phpmyadmin.node_port }} 
+  type: NodePort 
+
