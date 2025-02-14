@@ -1,12 +1,12 @@
-replicaCount: 2
-
 nginx:
+  replicas: 3
   node_port: "30002"
   inner_port: "80"
   inner_data_mount_path: "/usr/share/nginx/html"
   data_mount_path: "/host/html" 
 
 mysql:
+  replicas: 1
   node_port: "30006"
   host: "mysql-service"  
   inner_data_mount_path: "/var/lib/mysql"
@@ -17,11 +17,13 @@ mysql:
   root_password: "root" 
 
 phpmyadmin:
+  replicas: 1
   node_port: "30088"
   apache_server_name: "localhost" 
   inner_port: "80"
 
 phpfpm: 
+  replicas: 3
   inner_port: "9000"
   host: "php-fpm-service"  
 

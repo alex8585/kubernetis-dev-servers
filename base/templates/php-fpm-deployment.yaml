@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: php-fpm-deployment
 spec:
-  replicas: 1
+  replicas: {{ .Values.phpfpm.replicas }}
   selector:
     matchLabels:
       app: php-fpm
